@@ -9,7 +9,7 @@ Single command
 ```go
 func Build() error {
     ctx := context.Background()
-    return mageutil.RunDir(ctx, "cmd/server", "go build -o ../../bin/livekit-server")
+    return mageutil.RunDir(ctx, "cmd/server", "go build -o ../../bin/conkit-server")
 }
 ```
 
@@ -20,9 +20,9 @@ const gstVersion = 1.20.3
 
 func BuildDocker(version string) error {
     return mageutil.Run(context.Background(),
-        fmt.Sprintf("docker pull livekit/gstreamer:%s-dev", gstVersion),
-        fmt.Sprintf("docker pull livekit/gstreamer:%s-prod", gstVersion),
-        fmt.Sprintf("docker build -t livekit/egress:v%s -f build/Dockerfile .", version),
+        fmt.Sprintf("docker pull conkit/gstreamer:%s-dev", gstVersion),
+        fmt.Sprintf("docker pull conkit/gstreamer:%s-prod", gstVersion),
+        fmt.Sprintf("docker build -t conkit/egress:v%s -f build/Dockerfile .", version),
     )
 }
 ```
@@ -38,11 +38,11 @@ func BuildLivekit() error {
         return err
     }
 
-    if err = mageutil.CloneRepo("livekit", "livekit", dir); err != nil {
+    if err = mageutil.CloneRepo("conkit", "conkit", dir); err != nil {
         return err
     }
     
-    dir, err = filepath.Abs("../livekit")
+    dir, err = filepath.Abs("../conkit")
     if err != nil {
         return err
     }
@@ -71,10 +71,10 @@ func RunLivekitWithEgress() error {
     ctx := context.Background()
     group := mageutil.NewGroup(ctx)
     group.Go(func () error {
-        return RunDir(ctx, "../livekit", "bin/livekit-server --dev")
+        return RunDir(ctx, "../conkit", "bin/conkit-server --dev")
     })
     group.Go(func () error {
-        return Run(ctx, "docker run --rm -e EGRESS_CONFIG_FILE=/out/local.yaml -v ~/livekit/egress/test:/out livekit/egress")
+        return Run(ctx, "docker run --rm -e EGRESS_CONFIG_FILE=/out/local.yaml -v ~/conkit/egress/test:/out conkit/egress")
     })
     group.Wait()
 }

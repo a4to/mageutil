@@ -1,4 +1,4 @@
-module github.com/livekit/mageutil
+module github.com/conkit/mageutil
 
 go 1.18
 
