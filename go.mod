@@ -1,5 +1,5 @@
-module github.com/conkit/mageutil
+module github.com/a4to/mageutil
 
-go 1.18
+go 1.24.0
 
-require golang.org/x/sync v0.0.0-20220923202941-7f9b1623fab7
+require golang.org/x/sync v0.11.0
